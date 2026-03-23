@@ -11,6 +11,8 @@ if not TOKEN or not CHAT_ID:
     print("Erro: TOKEN ou CHAT_ID não definidos")
     exit()
 
+send_telegram("🚀 TESTE: bot funcionando")
+
 BASE_URL = "https://www.linkedin.com/jobs/search/?keywords=ux%20designer&location=Brazil"
 
 HEADERS = {
