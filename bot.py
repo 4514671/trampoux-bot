@@ -3,6 +3,12 @@ import requests
 import os
 from bs4 import BeautifulSoup
 
+# ===== FUNÇÃO PRIMEIRO =====
+def send_telegram(message):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    response = requests.post(url, data={"chat_id": CHAT_ID, "text": message})
+    print(response.text)
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
@@ -11,6 +17,7 @@ if not TOKEN or not CHAT_ID:
     print("Erro: TOKEN ou CHAT_ID não definidos")
     exit()
 
+# 👉 TESTE AQUI
 send_telegram("🚀 TESTE: bot funcionando")
 
 BASE_URL = "https://www.linkedin.com/jobs/search/?keywords=ux%20designer&location=Brazil"
