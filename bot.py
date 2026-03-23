@@ -1,10 +1,15 @@
 import time
 import requests
+import os
 from bs4 import BeautifulSoup
 
 # ===== CONFIG =====
-TOKEN = "8710425379:AAGJYLMm3R6WStzq2s77YBmEEh3F_34qhJ0"
-CHAT_ID = "7889741855"
+TOKEN = os.getenv("TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
+
+if not TOKEN or not CHAT_ID:
+    print("Erro: TOKEN ou CHAT_ID não definidos")
+    exit()
 
 BASE_URL = "https://www.linkedin.com/jobs/search/?keywords=ux%20designer&location=Brazil"
 
