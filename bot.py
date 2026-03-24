@@ -58,6 +58,10 @@ GOOD_COMPANIES = [
     "mercado livre", "stone", "loft"
 ]
 
+# ===== GERAR ID ÚNICO (ANTI DUPLICAÇÃO 🔥) =====
+def generate_job_id(title, company):
+    return f"{title.lower()}-{company.lower()}"
+
 # ===== IA DE AVALIAÇÃO =====
 def evaluate_job(description):
     score = 0
@@ -117,7 +121,7 @@ def is_good_title(title):
 
     return True
 
-# ===== FILTRO TEMPO (NOVO 🔥) =====
+# ===== FILTRO TEMPO =====
 def is_recent(job_element):
     try:
         time_element = job_element.find("time")
@@ -126,8 +130,7 @@ def is_recent(job_element):
 
         text = time_element.text.lower()
 
-        # ignora vagas antigas
-        if "day" in text and not "1 day" in text:
+        if "day" in text and "1 day" not in text:
             return False
         if "week" in text:
             return False
@@ -176,17 +179,24 @@ def check_jobs():
         title = link_tag.text.strip()
         link = link_tag["href"]
 
-        # 🔥 NOVO FILTRO DE TEMPO
-        if not is_recent(job):
+        company_tag = job.find("h4")
+        company = company_tag.text.strip() if company_tag else "unknown"
+
+        # 🔥 ID ÚNICO
+        job_id = generate_job_id(title, company)
+
+        # 🔥 NÃO REPETE MAIS
+        if job_id in seen_jobs:
             continue
 
-        if link in seen_jobs:
+        # 🔥 FILTRO DE TEMPO
+        if not is_recent(job):
             continue
 
         if not is_good_title(title):
             continue
 
-        seen_jobs.add(link)
+        seen_jobs.add(job_id)
 
         valid, no_exp, decision, extra = analyze_job_page(link)
 
@@ -206,6 +216,7 @@ def check_jobs():
         message = f"""{badge_company}{badge_exp}🔥 Nova vaga UX/UI
 
 📌 {title}
+🏢 {company}
 
 {decision} (score: {score})
 
